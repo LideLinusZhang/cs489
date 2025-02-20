@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define BUFSIZE 256
 
@@ -10,7 +11,7 @@ int isPathValid(char *path)
                            "1234567890_-.@/";
     const char *end = path + strlen(path);
 
-    if (path + strspn(cp, ok_chars) != end)
+    if (path + strspn(path, ok_chars) != end)
         return 0;
     
     return 1;
