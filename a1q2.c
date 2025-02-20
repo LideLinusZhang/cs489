@@ -10,7 +10,8 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Please provide the address of a file as an input.\n");
         return -1;
     }
-    char cmd[BUFSIZE] = "wc -c < ";
+    char cmd[BUFSIZE] = "wc -c < \"";
     strcat(cmd, argv[1]);
+    strcat(cmd, "\"");
     system(cmd);
 }
