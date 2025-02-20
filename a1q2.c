@@ -4,19 +4,6 @@
 
 #define BUFSIZE 256
 
-int isPathValid(char *path)
-{
-    const char *ok_chars = "abcdefghijklmnopqrstuvwxyz"
-                           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                           "1234567890_-.@/";
-    const char *end = path + strlen(path);
-
-    if (path + strspn(path, ok_chars) != end)
-        return 0;
-    
-    return 1;
-}
-
 // This program prints the size of a specified file in bytes
 int main(int argc, char **argv)
 {
@@ -27,13 +14,24 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    if (!isPathValid(argv[1]))
-    {
-        fprintf(stderr, "File address contains invalid characters.\n");
-        return -1;
-    } 
+    FILE *file = fopen(argv[1], "r");
 
-    char cmd[BUFSIZE] = "wc -c < ";
-    strncat(cmd, argv[1], BUFSIZE - 9);
-    system(cmd);
+    if (!file)
+    {
+        fprintf(stderr, "File open failed.\n");
+        return -1;
+    }
+
+    FILE *pipe = popen("wc -c", "w");
+
+    int c;
+    while ((c = fgetc(file)) != NULL)
+    {
+        fputc(c, pipe);
+    }
+
+    fclose(file);
+    pclose(pipe);
+
+    return 0;
 }
